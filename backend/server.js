@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const path = require("path");
 require("dotenv").config();
 
 const authRoutes = require("./routes/authRoutes");
@@ -9,41 +8,36 @@ const notesRoutes = require("./routes/notesRoutes");
 
 const app = express();
 
-// 🧪 Basic test route
+// ✅ Test route
 app.get("/", (req, res) => {
   res.send("🎉 Backend is running!");
 });
 
-// 👉 Middleware
+// Optional message for wrong method
+app.get("/api/auth/signup", (req, res) => {
+  res.send("🚫 Use POST to signup here.");
+});
+
+// ✅ Middleware
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static("uploads")); // For any uploaded files
+app.use("/uploads", express.static("uploads"));
 
-// 👉 API Routes
+// ✅ Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/notes", notesRoutes);
 
-// 👉 Serve frontend (React build)
-const frontendPath = path.join(__dirname, "frontend", "build");
-app.use(express.static(frontendPath));
+// ✅ MongoDB Connection and Server Start
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch((err) => console.error("❌ MongoDB Error:", err.message));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
+  const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
 
-// 👉 Connect to MongoDB and start server
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("✅ MongoDB Connected");
-    const PORT = process.env.PORT || 5001;
-    app.listen(PORT, () =>
-      console.log(`🚀 Server running on http://localhost:${PORT}`)
-    );
-  })
-  .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
 
