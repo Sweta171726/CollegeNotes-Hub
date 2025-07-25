@@ -17,8 +17,8 @@ const Home = () => {
     e.preventDefault();
     try {
       const url = isLogin
-        ? "http://localhost:5001/api/auth/login"
-        : "http://localhost:5001/api/auth/signup";
+        ? "http://localhost:8080/api/auth/login"
+        : "http://localhost:8080/api/auth/signup";
       const res = await axios.post(url, formData);
       alert(res.data.msg || "Success!");
       if (isLogin) {
