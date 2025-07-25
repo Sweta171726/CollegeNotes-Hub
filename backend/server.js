@@ -24,21 +24,20 @@ mongoose
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("❌ MongoDB Error:", err.message));
 
-// ✅ Serve frontend static files
-// ✅ Serve frontend static files
-const frontendPath = path.join(__dirname, "build");
+// ✅ Serve frontend static files — FIXED ✅
+const frontendPath = path.join(__dirname, "frontend", "build");
 app.use(express.static(frontendPath));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 
-
 // ✅ Start the server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
+
 
 
 
