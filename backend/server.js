@@ -25,12 +25,14 @@ mongoose
   .catch((err) => console.error("❌ MongoDB Error:", err.message));
 
 // ✅ Serve frontend static files
-const frontendPath = path.join(__dirname, "frontend", "build");
+// ✅ Serve frontend static files
+const frontendPath = path.join(__dirname, "build");
 app.use(express.static(frontendPath));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
+
 
 // ✅ Start the server
 const PORT = process.env.PORT || 8080;
