@@ -8,7 +8,6 @@ function Dashboard() {
   const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("token");
 
-  // 🔐 Redirect if not logged in
   useEffect(() => {
     if (!user || !token) {
       navigate("/login");
@@ -37,8 +36,6 @@ function Dashboard() {
   };
 
   const fetchNotes = useCallback(async () => {
-    console.log("📡 Sending GET request to /api/notes/all"); // Add this line
-  
     try {
       const res = await axios.get("http://localhost:5001/api/notes/all");
       setNotes(res.data);
@@ -46,7 +43,6 @@ function Dashboard() {
       console.error("❌ Failed to fetch notes:", err);
     }
   }, []);
-  
 
   const handleUpload = async () => {
     if (!file || !title || !semester || !year || !branch || !type) {
@@ -78,11 +74,8 @@ function Dashboard() {
     note.branch?.toUpperCase().trim() === selectedBranch.toUpperCase().trim() &&
     note.semester?.toString().trim() === selectedSemester.trim()
   );
-  
-  
-  
 
-  if (!user) return <p>Loading...</p>; // fallback for rare cases
+  if (!user) return <p>Loading...</p>;
 
   return (
     <div className="dashboard-container">
@@ -121,7 +114,7 @@ function Dashboard() {
         {years.map((year) => (
           <button
             key={year}
-            className={year-btn ${selectedYear === year ? "active" : ""}
+            className={`year-btn ${selectedYear === year ? "active" : ""}`}
             onClick={() => {
               setSelectedYear(year);
               setSelectedBranch("");
@@ -138,7 +131,7 @@ function Dashboard() {
           {branches.map((branch) => (
             <button
               key={branch}
-              className={branch-btn ${selectedBranch === branch ? "active" : ""}}
+              className={`branch-btn ${selectedBranch === branch ? "active" : ""}`}
               onClick={() => {
                 setSelectedBranch(branch);
                 setSelectedSemester("");
@@ -155,7 +148,7 @@ function Dashboard() {
           {semesterMap[selectedYear]?.map((sem) => (
             <button
               key={sem}
-              className={sem-btn ${selectedSemester === sem ? "active" : ""}}
+              className={`sem-btn ${selectedSemester === sem ? "active" : ""}`}
               onClick={() => setSelectedSemester(sem)}
             >
               Semester {sem}
@@ -175,7 +168,7 @@ function Dashboard() {
                 <li key={note._id}>
                   <strong>{note.title}</strong> ({note.type}) —{" "}
                   <a
-                    href={http://localhost:5001/${note.fileUrl}}
+                    href={`http://localhost:5001/${note.fileUrl}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -192,6 +185,7 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
 
 
 
