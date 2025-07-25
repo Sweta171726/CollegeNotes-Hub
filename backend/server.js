@@ -26,11 +26,11 @@ mongoose
 
 // ✅ Serve frontend static files — FIXED ✅
 // Serve static files from the frontend
-app.use(express.static(path.join(__dirname, "frontend", "dist")));
+app.use(express.static(path.join(__dirname, "frontend", "build")));
 
 // Fix for Express 5 — use named wildcard path
 app.get("/*path", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+  res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
 });
 
 
