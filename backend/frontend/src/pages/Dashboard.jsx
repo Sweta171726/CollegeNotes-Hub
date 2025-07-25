@@ -121,7 +121,7 @@ function Dashboard() {
         {years.map((year) => (
           <button
             key={year}
-            className={year-btn ${selectedYear === year ? "active" : ""}}
+            className={year-btn ${selectedYear === year ? "active" : ""}
             onClick={() => {
               setSelectedYear(year);
               setSelectedBranch("");
