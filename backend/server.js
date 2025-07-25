@@ -25,12 +25,14 @@ mongoose
   .catch((err) => console.error("❌ MongoDB Error:", err.message));
 
 // ✅ Serve frontend static files — FIXED ✅
-const frontendPath = path.join(__dirname, "frontend", "build");
-app.use(express.static(frontendPath));
+// Serve static files from the frontend
+app.use(express.static(path.join(__dirname, "frontend", "dist")));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
+// Fix for Express 5 — use named wildcard path
+app.get("/*path", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 });
+
 
 // ✅ Start the server
 const PORT = process.env.PORT || 8080;
