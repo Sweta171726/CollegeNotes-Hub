@@ -26,8 +26,8 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ rollNumber });
     if (!user) return res.status(400).json({ msg: "User not found" });
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
+   if (password !== user.password) return res.status(400).json({ msg: "Invalid credentials" });
+
 
     const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: "1d" });
     res.json({ token, user: {name: user.name,rollNumber: user.rollNumber, branch: user.branch, isAdmin: user.isAdmin } });
