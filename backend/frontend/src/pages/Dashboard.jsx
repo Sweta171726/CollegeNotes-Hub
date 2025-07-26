@@ -9,6 +9,7 @@ const backendUrl = "https://collegenotes-hub-28.onrender.com"; // ✅ centralize
 function Dashboard() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
+  console.log("User from localStorage:", user);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
