@@ -9,7 +9,7 @@ exports.signup = async (req, res) => {
     const userExists = await User.findOne({ rollNumber });
     if (userExists) return res.status(400).json({ msg: "User already exists" });
 
-    const hashed = await bcrypt.hash(password, 10);
+    
     const user = new User({ name,rollNumber, branch, password: hashed, isAdmin });
 
 
