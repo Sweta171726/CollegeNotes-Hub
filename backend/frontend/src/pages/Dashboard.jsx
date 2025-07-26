@@ -1,7 +1,10 @@
+// ✅ Updated Dashboard.jsx (production ready with working fetch & upload)
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
+
+const backendUrl = "https://collegenotes-hub-28.onrender.com"; // ✅ centralized backend URL
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -32,12 +35,12 @@ function Dashboard() {
     "1st": ["1", "2"],
     "2nd": ["3", "4"],
     "3rd": ["5", "6"],
-    "4th": ["7", "8"]
+    "4th": ["7", "8"],
   };
 
   const fetchNotes = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:5001/api/notes/all");
+      const res = await axios.get(`${backendUrl}/api/notes/all`);
       if (Array.isArray(res.data)) {
         setNotes(res.data);
       } else {
@@ -68,7 +71,7 @@ function Dashboard() {
     formData.append("type", type);
 
     try {
-      await axios.post("http://localhost:5001/api/notes/upload", formData, {
+      await axios.post(`${backendUrl}/api/notes/upload`, formData, {
         headers: { Authorization: token },
       });
       alert("✅ Uploaded successfully");
@@ -78,10 +81,11 @@ function Dashboard() {
     }
   };
 
-  const filteredNotes = notes.filter((note) =>
-    note.year?.toLowerCase().trim() === selectedYear.toLowerCase().trim() &&
-    note.branch?.toUpperCase().trim() === selectedBranch.toUpperCase().trim() &&
-    note.semester?.toString().trim() === selectedSemester.trim()
+  const filteredNotes = notes.filter(
+    (note) =>
+      note.year?.toLowerCase().trim() === selectedYear.toLowerCase().trim() &&
+      note.branch?.toUpperCase().trim() === selectedBranch.toUpperCase().trim() &&
+      note.semester?.toString().trim() === selectedSemester.trim()
   );
 
   if (!user) return <p>Loading...</p>;
@@ -96,19 +100,29 @@ function Dashboard() {
           <input placeholder="Title" onChange={(e) => setTitle(e.target.value)} />
           <input placeholder="Semester (e.g. 4)" onChange={(e) => setSemester(e.target.value)} />
           <select onChange={(e) => setYear(e.target.value)} defaultValue="">
-            <option value="" disabled>Select Year</option>
+            <option value="" disabled>
+              Select Year
+            </option>
             {years.map((y) => (
-              <option key={y} value={y}>{y}</option>
+              <option key={y} value={y}>
+                {y}
+              </option>
             ))}
           </select>
           <select onChange={(e) => setBranch(e.target.value)} defaultValue={branch}>
-            <option value="" disabled>Select Branch</option>
+            <option value="" disabled>
+              Select Branch
+            </option>
             {branches.map((b) => (
-              <option key={b} value={b}>{b}</option>
+              <option key={b} value={b}>
+                {b}
+              </option>
             ))}
           </select>
           <select onChange={(e) => setType(e.target.value)} defaultValue="">
-            <option value="" disabled>Select Type</option>
+            <option value="" disabled>
+              Select Type
+            </option>
             <option value="Notes">Notes</option>
             <option value="PYQ">PYQ</option>
           </select>
@@ -168,16 +182,18 @@ function Dashboard() {
 
       {selectedSemester && (
         <div className="notes-list">
-          <h4>📝 Notes for {selectedBranch} - Semester {selectedSemester}</h4>
+          <h4>
+            📝 Notes for {selectedBranch} - Semester {selectedSemester}
+          </h4>
           {filteredNotes.length === 0 ? (
             <p>No notes uploaded yet.</p>
           ) : (
             <ul>
               {filteredNotes.map((note) => (
                 <li key={note._id}>
-                  <strong>{note.title}</strong> ({note.type}) —{" "}
+                  <strong>{note.title}</strong> ({note.type}) — {" "}
                   <a
-                    href={`http://localhost:5001/${note.fileUrl}`}
+                    href={`${backendUrl}/${note.fileUrl}`}
                     target="_blank"
                     rel="noreferrer"
                   >
