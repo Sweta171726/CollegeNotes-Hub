@@ -1,5 +1,4 @@
 const User = require("../models/User");
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 exports.signup = async (req, res) => {
@@ -10,7 +9,7 @@ exports.signup = async (req, res) => {
     if (userExists) return res.status(400).json({ msg: "User already exists" });
 
     
-    const user = new User({ name,rollNumber, branch, password: hashed, isAdmin });
+    const user = new User({ name,rollNumber, branch, password, isAdmin });
 
 
     await user.save();
