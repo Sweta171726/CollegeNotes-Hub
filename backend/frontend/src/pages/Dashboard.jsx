@@ -4,8 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 
-const backendUrl = "https://collegenotes-hub-203.onrender.com";
- // ✅ your backend URL (confirm this!)
+const backendUrl ="https://collegenotes-hub-10202.onrender.com";
 ; // ✅ centralized backend URL
 
 function Dashboard() {
