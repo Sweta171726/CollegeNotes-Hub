@@ -3,8 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 
-const backendUrl ="https://collegenotes-hub-10202.onrender.com";
-; // ✅ centralized backend URL
+const backendUrl = "https://collegenotes-hub-10202.onrender.com"; // ✅ centralized backend URL
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -41,7 +40,7 @@ function Dashboard() {
 
   const fetchNotes = useCallback(async () => {
     try {
-      const res = await axios.get(${backendUrl}/api/notes/all);
+      const res = await axios.get(`${backendUrl}/api/notes/all`);
       if (Array.isArray(res.data)) {
         setNotes(res.data);
       } else {
@@ -70,28 +69,19 @@ function Dashboard() {
     formData.append("year", year.trim().toLowerCase());
     formData.append("branch", branch.trim().toUpperCase());
     formData.append("type", type);
-     console.log("Uploading with values:", {
-    file,
-    title,
-    semester,
-    year,
-    branch,
-    type
-  });
 
+    console.log("Uploading with values:", { file, title, semester, year, branch, type });
 
     try {
-      await axios.post(${backendUrl}/api/notes/upload, formData, {
-  headers: {
-    Authorization: Bearer ${token},
-    // ✅ required for file upload
-  },
-});
+      await axios.post(`${backendUrl}/api/notes/upload`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ Correct syntax
+        },
+      });
 
       alert("✅ Uploaded successfully");
       fetchNotes();
     } catch (err) {
-     
       alert(err.response?.data?.msg || "❌ Upload failed");
     }
   };
@@ -152,7 +142,7 @@ function Dashboard() {
         {years.map((year) => (
           <button
             key={year}
-            className={year-btn ${selectedYear === year ? "active" : ""}}
+            className={`year-btn ${selectedYear === year ? "active" : ""}`}
             onClick={() => {
               setSelectedYear(year);
               setSelectedBranch("");
@@ -169,7 +159,7 @@ function Dashboard() {
           {branches.map((branch) => (
             <button
               key={branch}
-              className={branch-btn ${selectedBranch === branch ? "active" : ""}}
+              className={`branch-btn ${selectedBranch === branch ? "active" : ""}`}
               onClick={() => {
                 setSelectedBranch(branch);
                 setSelectedSemester("");
@@ -186,7 +176,7 @@ function Dashboard() {
           {semesterMap[selectedYear]?.map((sem) => (
             <button
               key={sem}
-              className={sem-btn ${selectedSemester === sem ? "active" : ""}}
+              className={`sem-btn ${selectedSemester === sem ? "active" : ""}`}
               onClick={() => setSelectedSemester(sem)}
             >
               Semester {sem}
@@ -197,18 +187,16 @@ function Dashboard() {
 
       {selectedSemester && (
         <div className="notes-list">
-          <h4>
-            📝 Notes for {selectedBranch} - Semester {selectedSemester}
-          </h4>
+          <h4>📝 Notes for {selectedBranch} - Semester {selectedSemester}</h4>
           {filteredNotes.length === 0 ? (
             <p>No notes uploaded yet.</p>
           ) : (
             <ul>
               {filteredNotes.map((note) => (
                 <li key={note._id}>
-                  <strong>{note.title}</strong> ({note.type}) — {" "}
+                  <strong>{note.title}</strong> ({note.type}) —{" "}
                   <a
-                    href={${backendUrl}/${note.fileUrl}}
+                    href={`${backendUrl}/${note.fileUrl}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -225,6 +213,7 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
 
 
 
