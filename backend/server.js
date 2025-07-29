@@ -9,27 +9,8 @@ const notesRoutes = require("./routes/notesRoutes");
 
 const app = express();
 
-// ✅ Define allowed origins
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://collegenotes-hub-300.onrender.com"
-];
-
-// ✅ CORS middleware
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
-
 // ✅ Middleware
+app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
@@ -43,15 +24,18 @@ mongoose
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("❌ MongoDB Error:", err.message));
 
-// ✅ Serve frontend static files
+// ✅ Serve frontend static files — FIXED ✅
+// Serve static files from the frontend
 app.use(express.static(path.join(__dirname, "frontend", "build")));
 
-app.get("/*", (req, res) => {
+// Fix for Express 5 — use named wildcard path
+app.get("/*path", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
 });
+
 
 // ✅ Start the server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(🚀 Server running on http://localhost:${PORT});
 });
