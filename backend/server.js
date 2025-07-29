@@ -9,12 +9,7 @@ const notesRoutes = require("./routes/notesRoutes");
 
 const app = express();
 
-// ✅ Updated CORS Configuration
-const allowedOrigins = [
-  "https://collegenotes-hub-fdqy.onrender.com", // Render frontend
-  "http://localhost:3000",                      // Local frontend
-];
-
+app.use(cors());
 app.use(
   cors({
     origin: function (origin, callback) {
