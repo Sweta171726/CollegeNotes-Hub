@@ -79,7 +79,7 @@ function Dashboard() {
       alert("✅ Uploaded successfully");
       fetchNotes();
     } catch (err) {
-      console.error("Upload Error:", err.response || err);
+     
       alert(err.response?.data?.msg || "❌ Upload failed");
     }
   };
