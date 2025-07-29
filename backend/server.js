@@ -9,8 +9,15 @@ const notesRoutes = require("./routes/notesRoutes");
 
 const app = express();
 
-// ✅ Middleware
-app.use(cors());
+// ✅ CORRECT CORS MIDDLEWARE CONFIG
+app.use(
+  cors({
+    origin: "https://swetanotesdeploylive9001.onrender.com",
+    credentials: true,
+  })
+);
+
+// ✅ Other Middleware
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
@@ -24,19 +31,15 @@ mongoose
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("❌ MongoDB Error:", err.message));
 
-// ✅ Serve frontend static files — FIXED ✅
-// Serve static files from the frontend
+// ✅ Serve frontend static files
 app.use(express.static(path.join(__dirname, "frontend", "build")));
 
-// Fix for Express 5 — use named wildcard path
 app.get("/*path", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
 });
 
-
 // ✅ Start the server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-console.log(`🚀 Server running on http://localhost:${PORT}`);
-
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
