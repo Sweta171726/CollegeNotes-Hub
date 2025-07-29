@@ -72,12 +72,24 @@ function Dashboard() {
     formData.append("year", year.trim().toLowerCase());
     formData.append("branch", branch.trim().toUpperCase());
     formData.append("type", type);
+     console.log("Uploading with values:", {
+    file,
+    title,
+    semester,
+    year,
+    branch,
+    type
+  });
+
 
     try {
       await axios.post(`${backendUrl}/api/notes/upload`, formData, {
-       headers: { Authorization: `Bearer ${token}` }
+  headers: {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "multipart/form-data", // ✅ required for file upload
+  },
+});
 
-      });
       alert("✅ Uploaded successfully");
       fetchNotes();
     } catch (err) {
