@@ -85,7 +85,7 @@ function Dashboard() {
       await axios.post(`${backendUrl}/api/notes/upload`, formData, {
   headers: {
     Authorization: `Bearer ${token}`,
-    "Content-Type": "multipart/form-data", // ✅ required for file upload
+    // ✅ required for file upload
   },
 });
 
