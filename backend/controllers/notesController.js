@@ -5,6 +5,9 @@ exports.uploadNote = async (req, res) => {
   const file = req.file;
   const { title, semester, year, branch, type } = req.body;
 
+   console.log("📦 Received body:", req.body);
+  console.log("📁 Received file:", req.file);
+
   // Validate input
   if (!file || !title || !semester || !year || !branch || !type) {
     return res.status(400).json({ msg: "All fields are required including file" });
