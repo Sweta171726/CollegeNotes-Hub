@@ -9,7 +9,13 @@ const notesRoutes = require("./routes/notesRoutes");
 
 const app = express();
 
-app.use(cors());
+// ✅ Define allowed origins
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://collegenotes-hub-300.onrender.com"
+];
+
+// ✅ CORS middleware
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -23,6 +29,7 @@ app.use(
   })
 );
 
+// ✅ Middleware
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
@@ -36,10 +43,10 @@ mongoose
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("❌ MongoDB Error:", err.message));
 
-// ✅ Serve frontend static files — FIXED ✅
+// ✅ Serve frontend static files
 app.use(express.static(path.join(__dirname, "frontend", "build")));
 
-app.get("/*path", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
 });
 
@@ -48,7 +55,3 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
-
-
-
-
