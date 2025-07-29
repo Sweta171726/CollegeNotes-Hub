@@ -9,8 +9,25 @@ const notesRoutes = require("./routes/notesRoutes");
 
 const app = express();
 
-// ✅ Middleware
-app.use(cors());
+// ✅ Updated CORS Configuration
+const allowedOrigins = [
+  "https://collegenotes-hub-fdqy.onrender.com", // Render frontend
+  "http://localhost:3000",                      // Local frontend
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
@@ -25,14 +42,11 @@ mongoose
   .catch((err) => console.error("❌ MongoDB Error:", err.message));
 
 // ✅ Serve frontend static files — FIXED ✅
-// Serve static files from the frontend
 app.use(express.static(path.join(__dirname, "frontend", "build")));
 
-// Fix for Express 5 — use named wildcard path
 app.get("/*path", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
 });
-
 
 // ✅ Start the server
 const PORT = process.env.PORT || 8080;
