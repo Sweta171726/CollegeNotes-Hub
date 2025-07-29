@@ -8,8 +8,10 @@ const backendUrl = "https://collegenotes-hub-10202.onrender.com"; // ✅ central
 function Dashboard() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log("User from localStorage:", user);
   const token = localStorage.getItem("token");
+
+  console.log("🔑 User from localStorage:", user);
+  console.log("🔑 Token from localStorage:", token);
 
   useEffect(() => {
     if (!user || !token) {
@@ -58,7 +60,7 @@ function Dashboard() {
 
   const handleUpload = async () => {
     if (!file || !title || !semester || !year || !branch || !type) {
-      alert("Please fill all fields");
+      alert("⚠️ Please fill all fields");
       return;
     }
 
@@ -70,18 +72,28 @@ function Dashboard() {
     formData.append("branch", branch.trim().toUpperCase());
     formData.append("type", type);
 
-    console.log("Uploading with values:", { file, title, semester, year, branch, type });
+    // ✅ Debugging logs
+    console.log("📤 Uploading with values:", { file, title, semester, year, branch, type });
+    for (let [key, val] of formData.entries()) {
+      console.log("FormData:", key, val);
+    }
+    console.log("User object:", user);
+    console.log("Token being sent:", token);
 
     try {
       await axios.post(`${backendUrl}/api/notes/upload`, formData, {
         headers: {
-          Authorization: `Bearer ${token}`, // ✅ Correct syntax
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data", // ✅ Important for file upload
         },
+        maxBodyLength: Infinity,
       });
 
       alert("✅ Uploaded successfully");
       fetchNotes();
     } catch (err) {
+      console.error("❌ Upload error:", err.response?.data || err.message);
+      console.error("❌ Status:", err.response?.status);
       alert(err.response?.data?.msg || "❌ Upload failed");
     }
   };
@@ -213,7 +225,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
-
-
-
