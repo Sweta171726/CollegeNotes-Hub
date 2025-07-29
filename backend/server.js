@@ -12,7 +12,7 @@ const app = express();
 // ✅ CORRECT CORS MIDDLEWARE CONFIG
 app.use(
   cors({
-    origin: "https://collegenotes-hub-109.onrender.com",
+    origin: "https://collegenotes-hub-203.onrender.com",
     credentials: true,
   })
 );
