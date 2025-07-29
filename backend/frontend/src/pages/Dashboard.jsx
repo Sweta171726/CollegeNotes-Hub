@@ -1,18 +1,16 @@
-// ✅ Updated Dashboard.jsx with debug logging and better error handling
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 
-const backendUrl = "https://collegenotes-hub-10202.onrender.com"; // ✅ centralized backend URL
+const backendUrl ="https://collegenotes-hub-10202.onrender.com";
+; // ✅ centralized backend URL
 
 function Dashboard() {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
+  console.log("User from localStorage:", user);
   const token = localStorage.getItem("token");
-
-  console.log("🔑 User from localStorage:", user);
-  console.log("🔑 Token from localStorage:", token);
 
   useEffect(() => {
     if (!user || !token) {
@@ -43,7 +41,7 @@ function Dashboard() {
 
   const fetchNotes = useCallback(async () => {
     try {
-      const res = await axios.get(`${backendUrl}/api/notes/all`);
+      const res = await axios.get(${backendUrl}/api/notes/all);
       if (Array.isArray(res.data)) {
         setNotes(res.data);
       } else {
@@ -61,7 +59,7 @@ function Dashboard() {
 
   const handleUpload = async () => {
     if (!file || !title || !semester || !year || !branch || !type) {
-      alert("⚠️ Please fill all fields");
+      alert("Please fill all fields");
       return;
     }
 
@@ -72,24 +70,28 @@ function Dashboard() {
     formData.append("year", year.trim().toLowerCase());
     formData.append("branch", branch.trim().toUpperCase());
     formData.append("type", type);
+     console.log("Uploading with values:", {
+    file,
+    title,
+    semester,
+    year,
+    branch,
+    type
+  });
 
-    // ✅ Debugging
-    console.log("📤 Uploading with values:", { file, title, semester, year, branch, type });
-    for (let [key, val] of formData.entries()) {
-      console.log("FormData:", key, val);
-    }
-    console.log("Token being sent:", token);
-    console.log("User object:", user);
 
     try {
-      await axios.post(`${backendUrl}/api/notes/upload`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.post(${backendUrl}/api/notes/upload, formData, {
+  headers: {
+    Authorization: Bearer ${token},
+    // ✅ required for file upload
+  },
+});
+
       alert("✅ Uploaded successfully");
       fetchNotes();
     } catch (err) {
-      console.error("❌ Upload error:", err.response?.data || err.message);
-      console.error("❌ Status:", err.response?.status);
+     
       alert(err.response?.data?.msg || "❌ Upload failed");
     }
   };
@@ -150,7 +152,7 @@ function Dashboard() {
         {years.map((year) => (
           <button
             key={year}
-            className={`year-btn ${selectedYear === year ? "active" : ""}`}
+            className={year-btn ${selectedYear === year ? "active" : ""}}
             onClick={() => {
               setSelectedYear(year);
               setSelectedBranch("");
@@ -167,7 +169,7 @@ function Dashboard() {
           {branches.map((branch) => (
             <button
               key={branch}
-              className={`branch-btn ${selectedBranch === branch ? "active" : ""}`}
+              className={branch-btn ${selectedBranch === branch ? "active" : ""}}
               onClick={() => {
                 setSelectedBranch(branch);
                 setSelectedSemester("");
@@ -184,7 +186,7 @@ function Dashboard() {
           {semesterMap[selectedYear]?.map((sem) => (
             <button
               key={sem}
-              className={`sem-btn ${selectedSemester === sem ? "active" : ""}`}
+              className={sem-btn ${selectedSemester === sem ? "active" : ""}}
               onClick={() => setSelectedSemester(sem)}
             >
               Semester {sem}
@@ -204,8 +206,12 @@ function Dashboard() {
             <ul>
               {filteredNotes.map((note) => (
                 <li key={note._id}>
-                  <strong>{note.title}</strong> ({note.type}) —{" "}
-                  <a href={`${backendUrl}/${note.fileUrl}`} target="_blank" rel="noreferrer">
+                  <strong>{note.title}</strong> ({note.type}) — {" "}
+                  <a
+                    href={${backendUrl}/${note.fileUrl}}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     📥 Download PDF
                   </a>
                 </li>
@@ -219,7 +225,6 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
 
 
 
